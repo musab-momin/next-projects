@@ -1,0 +1,20 @@
+.nav{
+    width: 85%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav > *{
+    width: 100%;
+}
+
+.nav__ul{
+    display: flex;
+    justify-content: flex-end;
+    gap: 3rem;
+}
+.activepage{
+    color: rgb(0, 146, 151);
+}

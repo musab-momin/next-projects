@@ -1,0 +1,27 @@
+.frm{
+    width: 50%;
+    min-width: 640px;
+    margin: 4rem auto;
+    padding: 2rem 2rem;
+    background: var(--white);
+    border-radius: 5px;
+    box-shadow:  2px 5px 3px 0px rgba(0,0,0,0.5);
+}
+
+.frm__heading{
+    color: cadetblue;
+    font-size: 14px;
+    letter-spacing: 6px;
+    font-weight: 400;
+}
+
+.frm__inp{
+    margin: 1em 0;
+    padding: 1em 1em;
+    min-height: 45px;
+    outline: none;
+    border: none;
+    background: #f1f5f8;
+    width: 100%;
+    border-radius: 5px;
+}

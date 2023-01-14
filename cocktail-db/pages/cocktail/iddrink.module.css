@@ -1,0 +1,33 @@
+.container{
+    margin: 5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+
+.container__img{
+    position: relative;
+    width: 50%;
+    height: 400px;
+    border-radius: 5px;
+}
+.container__info{
+    width: 100%;
+}
+.container__row{
+    margin: 1em 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+}
+.container__row p{
+    font-weight: 500;   
+}
+.container__title{
+    background: #d4e6a5;
+    padding: .5em 1em;
+    color: #476a2e;
+    border-radius: 5px;
+    font-weight: 600 !important;
+}
