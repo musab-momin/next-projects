@@ -1,0 +1,16 @@
+.header{
+    background: var(--white-clr);
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--grey-secondary);
+
+}
+
+.nav{
+    height: 48px;
+}
+
+.imgContainer{
+    position: relative;
+    width: 150px;
+    height: 46px;
+}
