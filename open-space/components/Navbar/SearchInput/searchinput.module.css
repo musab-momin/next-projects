@@ -1,0 +1,25 @@
+.inptgrp{
+    height: 40px;
+    border: none;
+    width: 100%;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--grey-secondary);
+    background: var(--grey-secondary);
+}
+.inptgrp:hover, .inptgrp:focus{
+    background: var(--white-clr);
+    border: 1px solid var(--primary-blue);
+}
+.iconWrapper{
+    margin-left: 1rem;
+    margin-top: 5px;
+}
+.inp{
+    width: 100%;
+    padding: 0 1rem;
+    border: none;
+    outline: none;
+    background: none;
+}
