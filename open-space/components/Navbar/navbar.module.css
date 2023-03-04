@@ -1,8 +1,7 @@
 .header{
     background: var(--white-clr);
-    padding: 6px 12px;
+    padding: 6px 0;
     border-bottom: 1px solid var(--grey-secondary);
-
 }
 
 .nav{
@@ -17,4 +16,11 @@
     position: relative;
     width: 150px;
     height: 46px;
+}
+
+@media screen  and (max-width: 800px) {
+    .imgContainer{
+        width: 110px;
+        margin-left: 1rem;
+    }
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import AuthButtons from "./AuthButtons";
+import AuthModal from "./AuthModal";
 
 type rightSectionProps = {
   // user: any;
@@ -8,7 +9,7 @@ type rightSectionProps = {
 const RightSection: React.FC<rightSectionProps> = () => {
   return (
     <>
-      {/* <AuthModal /> */}
+      <AuthModal />
       <div className="flex">
         <AuthButtons />
       </div>

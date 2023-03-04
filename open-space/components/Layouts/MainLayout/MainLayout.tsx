@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import classes from "./mainlayout.module.css";
 import Head from "next/head";
 import Navbar from "@/components/Navbar/Navbar";
@@ -22,4 +22,4 @@ const MainLayout = ({ children }: props) => {
   );
 };
 
-export default MainLayout;
+export default memo(MainLayout);
