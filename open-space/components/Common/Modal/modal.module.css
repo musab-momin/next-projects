@@ -15,7 +15,7 @@
     margin: 0 auto;
     border-radius: 4px;
     background: var(--white-clr);
-    padding: 4%;
+    padding: 20px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 .modal__head{
@@ -24,6 +24,14 @@
 }
 .modal__title{
     font-weight: 500;
+}
+@media screen and (max-width: 800px) {
+    .modal{
+        padding: 10px;
+    }
+    .modal__head{
+        margin-top: 1rem;
+    }
 }
 .modal__body{
     margin: 1rem 0;

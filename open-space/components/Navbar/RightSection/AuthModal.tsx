@@ -1,4 +1,5 @@
 import AuthInputs from "@/components/AuthInputs/AuthInputs";
+import OAuthButtons from "@/components/AuthInputs/OAuthButtons";
 import Modal from "@/components/Common/Modal/Modal";
 import {
   useGlobalAppApiContext,
@@ -23,9 +24,12 @@ const AuthModal: React.FC<authmodalProps> = () => {
   return (
     <>
       <Modal title={title} isOpen={open} onClose={closeModal}>
-        {/* <OAuthButtons /> */}
-        <AuthInputs />
-        {/* <ResetPassword /> */}
+        <>
+          <OAuthButtons />
+          <p className="text-center">OR</p>
+          <AuthInputs />
+          {/* <ResetPassword /> */}
+        </>
       </Modal>
     </>
   );

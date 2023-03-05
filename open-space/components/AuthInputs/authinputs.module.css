@@ -4,3 +4,20 @@
  gap: 1rem;   
  margin: 2rem 0 1rem;
 }
+
+.authBtn{
+    background: var(--white-clr);
+    border: 2px solid var(--grey-secondary);
+    border-radius: 100px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    cursor: pointer;
+    transition: background .3s ease-in;
+}
+.authBtn:hover{
+    background: var(--secondary-blue);
+    border: 2px solid var(--secondary-blue);
+}
