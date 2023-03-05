@@ -24,42 +24,40 @@ const Login: React.FC<loginProps> = () => {
     openModal("signup");
   };
 
+  const onSubmit = (eve: React.FormEvent<HTMLFormElement>) => {
+    eve.preventDefault();
+  };
+
   return (
-    <>
-      <form className={classes.frm}>
-        <input
-          required
-          type="text"
-          className="inp"
-          name="username"
-          placeholder="USERNAME"
-          value={loginInputs.username}
-          onChange={(eve) => onInputChange(eve)}
-        />
-        <input
-          required
-          type="password"
-          className="inp"
-          name="password"
-          placeholder="PASSWORD"
-          value={loginInputs.password}
-          onChange={(eve) => onInputChange(eve)}
-        />
-        <button type="submit" className="frm-btn">
-          LOG IN
+    <form className={classes.frm} onSubmit={onSubmit}>
+      <input
+        required
+        type="text"
+        className="inp"
+        name="username"
+        placeholder="USERNAME"
+        value={loginInputs.username}
+        onChange={(eve) => onInputChange(eve)}
+      />
+      <input
+        required
+        type="password"
+        className="inp"
+        name="password"
+        placeholder="PASSWORD"
+        value={loginInputs.password}
+        onChange={(eve) => onInputChange(eve)}
+      />
+      <button type="submit" className="frm-btn">
+        LOG IN
+      </button>
+      <div>
+        <small>New to OpenSpace?</small>{" "}
+        <button type="button" className="link-btn" onClick={openModalAsSignup}>
+          Sign up
         </button>
-        <div>
-          <small>New to OpenSpace?</small>{" "}
-          <button
-            type="button"
-            className="link-btn"
-            onClick={openModalAsSignup}
-          >
-            Sign up
-          </button>
-        </div>
-      </form>
-    </>
+      </div>
+    </form>
   );
 };
 
