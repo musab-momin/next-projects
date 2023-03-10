@@ -3,6 +3,7 @@ import classes from "./authinputs.module.css";
 import { useGlobalAppApiContext } from "@/contexts/GlobalAppContext";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase/clientApp";
+import Toaster from "../Common/Toaster/Toaster";
 
 type signupProps = {};
 
@@ -47,7 +48,7 @@ const Signup: React.FC<signupProps> = () => {
   };
 
   useEffect(() => {
-    if (!validation.isError && error) {
+    if (error) {
       setValidation({
         isError: true,
         mssg:
@@ -58,7 +59,6 @@ const Signup: React.FC<signupProps> = () => {
       });
       return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
   return (

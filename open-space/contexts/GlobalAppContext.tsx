@@ -11,6 +11,11 @@ export interface initialProps {
     open: boolean;
     view: "login" | "signup" | "resetPassword";
   };
+  toasterState: {
+    isActive: boolean;
+    mssg: string;
+    type: string;
+  };
 }
 
 type globalAppContextProps = {
@@ -20,6 +25,10 @@ type globalAppContextProps = {
 export interface initialApiProps {
   openModal: (viewShouldBe: "login" | "signup" | "resetPassword") => void;
   closeModal: () => void;
+
+  successToaster: (message: string) => void;
+  errorToaster: (message: string) => void;
+  closeToaster: () => void;
 }
 
 const initial: initialProps = {
@@ -27,11 +36,19 @@ const initial: initialProps = {
     open: false,
     view: "login",
   },
+  toasterState: {
+    isActive: false,
+    mssg: "",
+    type: "",
+  },
 };
 
 const initialApi: initialApiProps = {
   openModal: () => {},
   closeModal: () => {},
+  successToaster: () => {},
+  errorToaster: () => {},
+  closeToaster: () => {},
 };
 
 const GlobalAppContext = createContext(initial);
@@ -58,12 +75,44 @@ export const GlobalContextProvider: React.FC<globalAppContextProps> = ({
     }));
   }, []);
 
+  const handleSuccessToaster = useCallback(() => {
+    (message: string) => {
+      setGlobalState((prev) => ({
+        ...prev,
+        toasterState: { isActive: true, mssg: message, type: "success" },
+      }));
+    };
+  }, []);
+
+  const handleErrorToaster = useCallback((message: string) => {
+    setGlobalState((prev) => ({
+      ...prev,
+      toasterState: { isActive: true, mssg: message, type: "error" },
+    }));
+  }, []);
+
+  const handleCloseToaster = useCallback(() => {
+    setGlobalState((prev) => ({
+      ...prev,
+      toasterState: { isActive: false, mssg: "", type: "" },
+    }));
+  }, []);
+
   const api = useMemo(
     () => ({
       openModal: handleOpenModal,
       closeModal: handleCloseModal,
+      successToaster: handleSuccessToaster,
+      errorToaster: handleErrorToaster,
+      closeToaster: handleCloseToaster,
     }),
-    [handleOpenModal, handleCloseModal]
+    [
+      handleOpenModal,
+      handleCloseModal,
+      handleSuccessToaster,
+      handleErrorToaster,
+      handleCloseToaster,
+    ]
   );
 
   return (
