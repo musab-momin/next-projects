@@ -75,13 +75,11 @@ export const GlobalContextProvider: React.FC<globalAppContextProps> = ({
     }));
   }, []);
 
-  const handleSuccessToaster = useCallback(() => {
-    (message: string) => {
-      setGlobalState((prev) => ({
-        ...prev,
-        toasterState: { isActive: true, mssg: message, type: "success" },
-      }));
-    };
+  const handleSuccessToaster = useCallback((message: string) => {
+    setGlobalState((prev) => ({
+      ...prev,
+      toasterState: { isActive: true, mssg: message, type: "success" },
+    }));
   }, []);
 
   const handleErrorToaster = useCallback((message: string) => {

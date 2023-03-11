@@ -11,6 +11,10 @@
     color: var(--white-clr);
     display: grid;
     place-items: center;
+    z-index: 1401;
+}
+
+.containerAnimation{
     animation: toasterAnimation 3s cubic-bezier(0, 0, 0.25, 1.4);
 }
 
