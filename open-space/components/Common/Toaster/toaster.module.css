@@ -1,0 +1,29 @@
+.container{
+    position: fixed;
+    bottom: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 35px;
+    text-align: center;
+    border-radius: 100px;
+    background: rgba(0,0,0,.8);
+    color: var(--white-clr);
+    display: grid;
+    place-items: center;
+    z-index: 1401;
+}
+
+.containerAnimation{
+    animation: toasterAnimation 3s cubic-bezier(0, 0, 0.25, 1.4);
+}
+
+@keyframes toasterAnimation {
+    0%{
+        bottom: -20%;
+    }50%{
+        bottom: 40px;
+    }100%{
+        bottom: -20%;
+    }
+}

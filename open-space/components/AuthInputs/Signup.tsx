@@ -3,11 +3,12 @@ import classes from "./authinputs.module.css";
 import { useGlobalAppApiContext } from "@/contexts/GlobalAppContext";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase/clientApp";
+import Toaster from "../Common/Toaster/Toaster";
 
 type signupProps = {};
 
 const Signup: React.FC<signupProps> = () => {
-  const { openModal } = useGlobalAppApiContext();
+  const { openModal, successToaster, errorToaster } = useGlobalAppApiContext();
 
   const [formValues, setformValues] = useState({
     username: "",
@@ -38,16 +39,21 @@ const Signup: React.FC<signupProps> = () => {
 
   const onSubmit = (eve: React.FormEvent<HTMLFormElement>) => {
     eve.preventDefault();
-    console.log({ error });
     if (formValues.password !== formValues.confirm_password) {
       setValidation({ isError: true, mssg: "Password did not matched" });
       return;
     }
-    createUserWithEmailAndPassword(formValues.email, formValues.password);
+    createUserWithEmailAndPassword(formValues.email, formValues.password)
+      .then((res: any) => {
+        !!res && successToaster("Registered Successfuly!!");
+      })
+      .catch((err: any) => {
+        console.error(err);
+        errorToaster("Something went wrong, Please try again!!");
+      });
   };
-
   useEffect(() => {
-    if (!validation.isError && error) {
+    if (error) {
       setValidation({
         isError: true,
         mssg:
@@ -56,11 +62,8 @@ const Signup: React.FC<signupProps> = () => {
             .replace("(auth/weak-password).", "") ||
           "something went wrong, please try again!",
       });
-      return;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
-
   return (
     <>
       <form className={classes.frm} onSubmit={onSubmit}>
@@ -109,7 +112,7 @@ const Signup: React.FC<signupProps> = () => {
           type="submit"
           className={`frm-btn ${loading ? "btn-loading" : ""}`}
         >
-          Sign Up
+          {loading ? "Sign Up..." : "Sign Up"}
         </button>
         <div>
           <small>Already into OpenSpace?</small>{" "}
