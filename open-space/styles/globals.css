@@ -138,7 +138,7 @@ main{
   transition: opacity .3s linear;
 }
 .primary-btn:hover, .frm-btn:hover{
-  opacity: .90;
+  opacity: .80;
 }
 
 .link-btn{

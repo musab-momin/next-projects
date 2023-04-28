@@ -1,14 +1,24 @@
 import React, { useState } from "react";
 import classes from "./authinputs.module.css";
 import { useGlobalAppApiContext } from "@/contexts/GlobalAppContext";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { auth } from "@/firebase/clientApp";
 
 type loginProps = {};
 
+const FIREBASE_ERROR: any = {
+  "Firebase: Error (auth/user-not-found).": "Account didn't exist, try signup",
+  "Firebase: Error (auth/wrong-password).": "Password is not correct!",
+};
+
 const Login: React.FC<loginProps> = () => {
-  const { openModal } = useGlobalAppApiContext();
+  const { openModal, successToaster, errorToaster, closeModal } =
+    useGlobalAppApiContext();
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(auth);
 
   const [loginInputs, setLoginInputs] = useState({
-    username: "",
+    useremail: "",
     password: "",
   });
 
@@ -26,17 +36,30 @@ const Login: React.FC<loginProps> = () => {
 
   const onSubmit = (eve: React.FormEvent<HTMLFormElement>) => {
     eve.preventDefault();
+    signInWithEmailAndPassword(loginInputs.useremail, loginInputs.password)
+      .then((res: any) => {
+        console.log(error);
+        if (!res) {
+          errorToaster(FIREBASE_ERROR[`${error?.message}`]);
+        } else {
+          successToaster("You are loggedin successfully!!");
+          closeModal();
+        }
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
   };
 
   return (
     <form className={classes.frm} onSubmit={onSubmit}>
       <input
         required
-        type="text"
+        type="email"
         className="inp"
-        name="username"
-        placeholder="USERNAME"
-        value={loginInputs.username}
+        name="useremail"
+        placeholder="EMAIL"
+        value={loginInputs.useremail}
         onChange={(eve) => onInputChange(eve)}
       />
       <input
@@ -48,7 +71,10 @@ const Login: React.FC<loginProps> = () => {
         value={loginInputs.password}
         onChange={(eve) => onInputChange(eve)}
       />
-      <button type="submit" className="frm-btn">
+      <button
+        type="submit"
+        className={`frm-btn ${loading ? "btn-loading" : ""}`}
+      >
         LOG IN
       </button>
       <div>

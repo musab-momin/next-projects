@@ -3,8 +3,6 @@ import classes from "./authinputs.module.css";
 import { useGlobalAppApiContext } from "@/contexts/GlobalAppContext";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "@/firebase/clientApp";
-import Toaster from "../Common/Toaster/Toaster";
-
 type signupProps = {};
 
 const Signup: React.FC<signupProps> = () => {
