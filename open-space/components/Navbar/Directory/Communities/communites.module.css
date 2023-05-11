@@ -1,0 +1,28 @@
+.inpGrp{
+    display: flex;
+    margin: 1rem 0;
+}
+.inpGrp > p{
+    font-size: 0.75rem;
+    margin-left: .5em;
+    display: flex;
+    align-items: flex-end;
+    min-width: max-content;
+}
+.inpGrp  span{
+    margin-right: 5px;
+}
+.inpGrp b{
+    margin-right: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+@media screen and (max-width: 800px) {
+    .inpGrp > p{
+        align-items: center;
+        min-width: fit-content;
+        padding: 0 5px;
+    }
+}

@@ -9,7 +9,7 @@ import {
 export interface initialProps {
   modalState: {
     open: boolean;
-    view: "login" | "signup" | "resetPassword";
+    view: "login" | "signup" | "resetPassword" | "general";
   };
   toasterState: {
     isActive: boolean;
@@ -23,7 +23,9 @@ type globalAppContextProps = {
 };
 
 export interface initialApiProps {
-  openModal: (viewShouldBe: "login" | "signup" | "resetPassword") => void;
+  openModal: (
+    viewShouldBe: "login" | "signup" | "resetPassword" | "general"
+  ) => void;
   closeModal: () => void;
 
   successToaster: (message: string) => void;
@@ -59,7 +61,7 @@ export const GlobalContextProvider: React.FC<globalAppContextProps> = ({
   const [globalState, setGlobalState] = useState(initial);
 
   const handleOpenModal = useCallback(
-    (viewShouldBe: "login" | "signup" | "resetPassword") => {
+    (viewShouldBe: "login" | "signup" | "resetPassword" | "general") => {
       setGlobalState((perv) => ({
         ...perv,
         modalState: { open: true, view: viewShouldBe },

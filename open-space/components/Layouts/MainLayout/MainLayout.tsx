@@ -17,7 +17,7 @@ const MainLayout = ({ children }: props) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <Navbar />
-      <main>{children}</main>
+      <main className="container">{children}</main>
     </>
   );
 };

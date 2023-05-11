@@ -14,12 +14,7 @@ const AuthModal: React.FC<authmodalProps> = () => {
     modalState: { open, view },
   } = useGlobalAppContex();
   const { closeModal } = useGlobalAppApiContext();
-  const title =
-    view === "login"
-      ? "Login"
-      : view === "signup"
-      ? "Signup"
-      : "Reset Password";
+  const title = view === "login" ? "Login" : view === "signup" ? "Signup" : "";
 
   return (
     <>

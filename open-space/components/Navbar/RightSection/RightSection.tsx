@@ -10,7 +10,7 @@ const RightSection: React.FC<rightSectionProps> = () => {
   return (
     <>
       <AuthModal />
-      <div className="flex">
+      <div className="always-flex grow-flex">
         <AuthButtons />
       </div>
     </>

@@ -38,9 +38,10 @@ const Login: React.FC<loginProps> = () => {
     eve.preventDefault();
     signInWithEmailAndPassword(loginInputs.useremail, loginInputs.password)
       .then((res: any) => {
-        console.log(error);
         if (!res) {
-          errorToaster(FIREBASE_ERROR[`${error?.message}`]);
+          errorToaster(
+            FIREBASE_ERROR[`${error?.message}`] || "Something went wrong!"
+          );
         } else {
           successToaster("You are loggedin successfully!!");
           closeModal();
