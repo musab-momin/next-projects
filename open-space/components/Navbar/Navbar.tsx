@@ -6,11 +6,17 @@ import SearchInput from "./SearchInput/SearchInput";
 import RightSection from "./RightSection/RightSection";
 import useIsMobile from "@/utils/shared-hooks/useIsMobile";
 import Directory from "./Directory/Directory";
+import useUserAuth from "@/utils/shared-hooks/useUserAuth";
 
 type NavbarProps = {};
 
 const Navbar: React.FC<NavbarProps> = () => {
   const isMobile = useIsMobile();
+  const { user, loading } = useUserAuth();
+
+  if (loading) {
+    return <></>;
+  }
   return (
     <header className={`${classes.header}`}>
       <nav className={`container ${classes.nav}`}>
@@ -30,10 +36,10 @@ const Navbar: React.FC<NavbarProps> = () => {
               priority
             />
           </div>
-          <Directory />
+          {user && <Directory />}
         </div>
         {!isMobile && <SearchInput />}
-        <RightSection />
+        <RightSection user={user} />
       </nav>
     </header>
   );

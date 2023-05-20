@@ -4,11 +4,12 @@ import { useGlobalAppApiContext } from "@/contexts/GlobalAppContext";
 import useUserAuth from "@/utils/shared-hooks/useUserAuth";
 import LoggedInActions from "./LoggedInActions/LoggedInActions";
 
-type authButtonsProps = {};
+type authButtonsProps = {
+  user: any;
+};
 
-const AuthButtons: React.FC<authButtonsProps> = () => {
+const AuthButtons: React.FC<authButtonsProps> = ({ user }) => {
   const { openModal } = useGlobalAppApiContext();
-  const { user, loading } = useUserAuth();
   const openModalAsLogin = () => {
     openModal("login");
   };
@@ -16,9 +17,6 @@ const AuthButtons: React.FC<authButtonsProps> = () => {
   const openModalAsSignup = () => {
     openModal("signup");
   };
-  if (loading) {
-    return <>loading...</>;
-  }
 
   return (
     <>

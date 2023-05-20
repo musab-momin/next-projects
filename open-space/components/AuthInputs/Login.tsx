@@ -14,7 +14,7 @@ const FIREBASE_ERROR: any = {
 const Login: React.FC<loginProps> = () => {
   const { openModal, successToaster, errorToaster, closeModal } =
     useGlobalAppApiContext();
-  const [signInWithEmailAndPassword, user, loading, error] =
+  const [signInWithEmailAndPassword, , loading, error] =
     useSignInWithEmailAndPassword(auth);
 
   const [loginInputs, setLoginInputs] = useState({

@@ -5,6 +5,10 @@ import { GrAdd } from "react-icons/gr";
 import { FaUser } from "react-icons/fa";
 import { VscEye } from "react-icons/vsc";
 import { HiLockClosed } from "react-icons/hi";
+import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { firestore, auth } from "@/firebase/clientApp";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useGlobalAppApiContext } from "@/contexts/GlobalAppContext";
 
 const COMMUNITY_TYPES = [
   {
@@ -26,13 +30,19 @@ const COMMUNITY_TYPES = [
 
 const Communities = () => {
   const [open, setOpen] = useState(false);
+  const [validationError, setValidationError] = useState("");
   const [communityValues, setCommunityValues] = useState({
     communityName: "",
     communityType: "public",
   });
   const [charLimit, setCharLimit] = useState(21);
+  const [loading, setLoading] = useState(false);
+  const [user] = useAuthState(auth);
+
+  const { successToaster } = useGlobalAppApiContext();
 
   const handleChange = (eve: React.ChangeEvent<HTMLInputElement>) => {
+    if (validationError) setValidationError("");
     const { name, value } = eve.target;
     if (value.length > 21) return;
     setCommunityValues((prev) => ({ ...prev, [name]: value }));
@@ -41,8 +51,49 @@ const Communities = () => {
 
   const handleRadio = (eve: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = eve.target;
-    console.log(value);
     setCommunityValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const createCommunity = async () => {
+    const validationReg = /[ !@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]/g;
+    if (validationReg.test(communityValues.communityName)) {
+      setValidationError("Not a valid community name");
+      return;
+    }
+    try {
+      setLoading(true);
+      //create reference of single entry in table you want to update
+      //check is the entry exist if yes update it else create it
+
+      //creating a reference of single entry in table, this doc function takes firestore, table name and key value of the table entry
+      const communityDocRef = doc(
+        firestore,
+        "communities",
+        communityValues.communityName
+      );
+      const communityDoc = await getDoc(communityDocRef);
+
+      if (communityDoc.exists()) {
+        throw new Error(
+          `This community name ${communityValues.communityName} is already taken, try another.`
+        );
+      }
+
+      //create community
+      await setDoc(communityDocRef, {
+        creatorId: user?.uid,
+        createdAt: serverTimestamp(),
+        numberOfMembers: 1,
+        privacyType: communityValues.communityType,
+      });
+      setLoading(false);
+      if (validationError) setValidationError("");
+      successToaster("Community created Successfully!!");
+    } catch (err: any) {
+      console.error(err);
+      setValidationError(err.message);
+      setLoading(false);
+    }
   };
 
   return (
@@ -66,7 +117,7 @@ const Communities = () => {
             <div className="mb">
               <h3>Name</h3>
               <small>
-                community names including capitalisation cannot be change
+                community names including capitalizations cannot be change
               </small>
             </div>
             <input
@@ -80,9 +131,13 @@ const Communities = () => {
             />
             <label
               htmlFor="community-name"
-              className={`sm-txt ${charLimit === 0 ? "err-txt" : ""}`}
+              className={`sm-txt ${
+                charLimit === 0 || validationError ? "err-txt" : ""
+              }`}
             >
-              {charLimit} characters are left
+              {validationError
+                ? validationError
+                : `${charLimit} characters are left`}
             </label>
           </div>
           <div className="mt">
@@ -96,14 +151,24 @@ const Communities = () => {
                   onChange={handleRadio}
                   checked={communityValues.communityType === item.title}
                   value={item.title}
+                  id={`community-${item.title}`}
                 />
-                <p>
+                <label htmlFor={`community-${item.title}`}>
                   <span>{item.icon}</span>
                   <b>{item.title}</b>
                   {item.desc}
-                </p>
+                </label>
               </div>
             ))}
+          </div>
+          <div className="mt">
+            <button
+              type="button"
+              className={`frm-btn primary-btn ${loading ? "btn-loading" : ""}`}
+              onClick={createCommunity}
+            >
+              Create Community
+            </button>
           </div>
         </>
       </Modal>
