@@ -3,15 +3,15 @@ import AuthButtons from "./AuthButtons";
 import AuthModal from "./AuthModal";
 
 type rightSectionProps = {
-  // user: any;
+  user: any;
 };
 
-const RightSection: React.FC<rightSectionProps> = () => {
+const RightSection: React.FC<rightSectionProps> = ({ user }) => {
   return (
     <>
       <AuthModal />
-      <div className="flex">
-        <AuthButtons />
+      <div className="always-flex grow-flex">
+        <AuthButtons user={user} />
       </div>
     </>
   );

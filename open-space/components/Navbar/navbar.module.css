@@ -1,4 +1,5 @@
 .header{
+    width: 100vw;
     background: var(--white-clr);
     padding: 6px 0;
     border-bottom: 1px solid var(--grey-secondary);
@@ -18,9 +19,42 @@
     height: 46px;
 }
 
+.shimmerNav{
+    width: 100vw;
+    height: 48px;
+    background: #f6f7f8;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+
+    position: relative;
+}
+
+.shimmer{
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: linear-gradient(100deg, rgba(255, 255, 255, 0) 20%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 100%);
+
+    animation: shimmerAnime 1.5s infinite forwards linear;
+}
+
+@keyframes shimmerAnime {
+    from{
+        transform: translateX(-300%);
+    }to{
+        transform: translateX(300%);
+    }
+
+}
+
+
 @media screen  and (max-width: 800px) {
     .imgContainer{
         width: 110px;
-        margin-left: 1rem;
+        margin-left: .5rem;
+    }
+    .nav{
+        gap: 8px;
     }
 }

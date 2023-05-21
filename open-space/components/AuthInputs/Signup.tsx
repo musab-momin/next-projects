@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import classes from "./authinputs.module.css";
 import { useGlobalAppApiContext } from "@/contexts/GlobalAppContext";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { auth } from "@/firebase/clientApp";
-import Toaster from "../Common/Toaster/Toaster";
+import { auth, firestore } from "@/firebase/clientApp";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { User } from "firebase/auth";
 
 type signupProps = {};
 
 const Signup: React.FC<signupProps> = () => {
-  const { openModal, successToaster, errorToaster } = useGlobalAppApiContext();
-
+  const { openModal, closeModal, successToaster, errorToaster } =
+    useGlobalAppApiContext();
   const [formValues, setformValues] = useState({
     username: "",
     email: "",
@@ -21,7 +22,7 @@ const Signup: React.FC<signupProps> = () => {
     isError: false,
     mssg: "",
   });
-  const [createUserWithEmailAndPassword, user, loading, error] =
+  const [createUserWithEmailAndPassword, userCred, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
 
   const onInputChange = (eve: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,25 +46,40 @@ const Signup: React.FC<signupProps> = () => {
     }
     createUserWithEmailAndPassword(formValues.email, formValues.password)
       .then((res: any) => {
-        !!res && successToaster("Registered Successfuly!!");
+        if (!res) {
+          setValidation({
+            isError: true,
+            mssg:
+              error?.message
+                .replace("Firebase:", "")
+                .replace("(auth/weak-password).", "") ||
+              "something went wrong, please try again!",
+          });
+        } else {
+          successToaster("Registered Successfully!!");
+        }
       })
       .catch((err: any) => {
         console.error(err);
         errorToaster("Something went wrong, Please try again!!");
       });
   };
+
+  //wrapped this function in callback bcoz it is in dependency of below useEffect
+  const createUserDocument = useCallback(
+    async (user: User) => {
+      const docRef = doc(firestore, "users", user.uid);
+      await setDoc(docRef, user);
+      closeModal();
+    },
+    [closeModal]
+  );
+
   useEffect(() => {
-    if (error) {
-      setValidation({
-        isError: true,
-        mssg:
-          error?.message
-            .replace("Firebase:", "")
-            .replace("(auth/weak-password).", "") ||
-          "something went wrong, please try again!",
-      });
+    if (userCred) {
+      createUserDocument(JSON.parse(JSON.stringify(userCred?.user)));
     }
-  }, [error]);
+  }, [userCred, createUserDocument]);
   return (
     <>
       <form className={classes.frm} onSubmit={onSubmit}>

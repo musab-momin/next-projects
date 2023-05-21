@@ -1,0 +1,44 @@
+.container{
+    display: grid;
+    place-items: center;
+    position: relative;
+}
+
+.container button{
+    cursor: pointer;
+}
+
+.dropItem{
+    display: none;
+    position: absolute;
+    top: 150%;
+    background: var(--white-clr);
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+.openModal{
+    display: block;
+}
+
+.dropItem li{
+    padding: 16px 40px;
+    cursor: pointer;
+    transition: background .3s linear;
+}
+
+.dropItem li:hover{
+    background: var(--grey-secondary);
+}
+
+@media screen and (max-width: 800px) {
+    .dropItem{
+        top: 150%;
+        right: 0;
+    }
+    .dropItemCentre{
+        right: unset;
+    }
+    .dropItem li{
+        padding: 16px 20px;
+    }
+}
