@@ -5,7 +5,15 @@ import { GrAdd } from "react-icons/gr";
 import { FaUser } from "react-icons/fa";
 import { VscEye } from "react-icons/vsc";
 import { HiLockClosed } from "react-icons/hi";
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  runTransaction,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import { firestore, auth } from "@/firebase/clientApp";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useGlobalAppApiContext } from "@/contexts/GlobalAppContext";
@@ -63,32 +71,45 @@ const Communities = () => {
     try {
       setLoading(true);
       //create reference of single entry in table you want to update
-      //check is the entry exist if yes update it else create it
 
-      //creating a reference of single entry in table, this doc function takes firestore, table name and key value of the table entry
       const communityDocRef = doc(
         firestore,
         "communities",
         communityValues.communityName
       );
-      const communityDoc = await getDoc(communityDocRef);
 
-      if (communityDoc.exists()) {
-        throw new Error(
-          `This community name ${communityValues.communityName} is already taken, try another.`
+      await runTransaction(firestore, async (transaction) => {
+        //check is the entry exist if yes update it else create it
+        const communityDoc = await transaction.get(communityDocRef);
+        if (communityDoc.exists()) {
+          throw new Error(
+            `This community name ${communityValues.communityName} is already taken, try another.`
+          );
+        }
+        //create community
+        transaction.set(communityDocRef, {
+          creatorId: user?.uid,
+          createdAt: serverTimestamp(),
+          numberOfMembers: 1,
+          privacyType: communityValues.communityType,
+        });
+
+        //adding created community to exsiting user
+        transaction.set(
+          doc(
+            firestore,
+            `/users/${user?.uid}/community-details`,
+            communityValues.communityName
+          ),
+          {
+            id: communityValues.communityName,
+            isModerator: true,
+          }
         );
-      }
-
-      //create community
-      await setDoc(communityDocRef, {
-        creatorId: user?.uid,
-        createdAt: serverTimestamp(),
-        numberOfMembers: 1,
-        privacyType: communityValues.communityType,
+        setLoading(false);
+        if (validationError) setValidationError("");
+        successToaster("Community created Successfully!!");
       });
-      setLoading(false);
-      if (validationError) setValidationError("");
-      successToaster("Community created Successfully!!");
     } catch (err: any) {
       console.error(err);
       setValidationError(err.message);

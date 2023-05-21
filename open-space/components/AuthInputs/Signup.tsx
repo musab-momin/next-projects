@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import classes from "./authinputs.module.css";
 import { useGlobalAppApiContext } from "@/contexts/GlobalAppContext";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth, firestore } from "@/firebase/clientApp";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { User } from "firebase/auth";
 
 type signupProps = {};
@@ -56,7 +56,6 @@ const Signup: React.FC<signupProps> = () => {
               "something went wrong, please try again!",
           });
         } else {
-          closeModal();
           successToaster("Registered Successfully!!");
         }
       })
@@ -66,15 +65,21 @@ const Signup: React.FC<signupProps> = () => {
       });
   };
 
-  const createUserDocument = async (user: User) => {
-    await addDoc(collection(firestore, "users"), user);
-  };
+  //wrapped this function in callback bcoz it is in dependency of below useEffect
+  const createUserDocument = useCallback(
+    async (user: User) => {
+      const docRef = doc(firestore, "users", user.uid);
+      await setDoc(docRef, user);
+      closeModal();
+    },
+    [closeModal]
+  );
+
   useEffect(() => {
-    console.log("~ user cred", userCred?.user);
     if (userCred) {
       createUserDocument(JSON.parse(JSON.stringify(userCred?.user)));
     }
-  }, [userCred]);
+  }, [userCred, createUserDocument]);
   return (
     <>
       <form className={classes.frm} onSubmit={onSubmit}>

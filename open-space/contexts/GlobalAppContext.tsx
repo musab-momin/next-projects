@@ -1,3 +1,6 @@
+import { auth, firestore } from "@/firebase/clientApp";
+import { useEffect } from "react";
+import { collection, getDocs } from "firebase/firestore";
 import {
   createContext,
   useCallback,
@@ -5,7 +8,14 @@ import {
   useMemo,
   useState,
 } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { User } from "firebase/auth";
 
+export interface CommunityDetails {
+  id: string;
+  isModerator: boolean;
+  iconURL?: string;
+}
 export interface initialProps {
   modalState: {
     open: boolean;
@@ -16,6 +26,7 @@ export interface initialProps {
     mssg: string;
     type: string;
   };
+  communityDetails: CommunityDetails[] | null;
 }
 
 type globalAppContextProps = {
@@ -43,6 +54,7 @@ const initial: initialProps = {
     mssg: "",
     type: "",
   },
+  communityDetails: null,
 };
 
 const initialApi: initialApiProps = {
@@ -58,6 +70,7 @@ const GlobalAppApiContext = createContext(initialApi);
 export const GlobalContextProvider: React.FC<globalAppContextProps> = ({
   children,
 }) => {
+  const [user] = useAuthState(auth);
   const [globalState, setGlobalState] = useState(initial);
 
   const handleOpenModal = useCallback(
@@ -97,6 +110,31 @@ export const GlobalContextProvider: React.FC<globalAppContextProps> = ({
       toasterState: { isActive: false, mssg: "", type: "" },
     }));
   }, []);
+
+  const setCommunityDetails = useCallback(async (user: User) => {
+    try {
+      const communityDetailsDocs = await getDocs(
+        collection(firestore, `users/${user?.uid}/community-details`)
+      );
+      const details: CommunityDetails[] = communityDetailsDocs.docs.map(
+        (doc) => ({
+          ...doc.data(),
+        })
+      ) as CommunityDetails[];
+      setGlobalState((val) => ({ ...val, communityDetails: details }));
+    } catch (error) {
+      console.log("community details fetching error", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log("~ why its not");
+    if (!user) {
+      setGlobalState((val) => ({ ...val, communityDetails: null }));
+      return;
+    }
+    setCommunityDetails(user);
+  }, [user, setCommunityDetails]);
 
   const api = useMemo(
     () => ({
