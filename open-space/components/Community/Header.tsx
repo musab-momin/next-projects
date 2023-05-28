@@ -1,12 +1,15 @@
 import React from "react";
 import classes from "./community.module.css";
 import Image from "next/image";
+import { CommunityDetails } from "@/contexts/GlobalAppContext";
+import { isMemberName } from "typescript";
 
 type HeaderProps = {
   communityName: string;
   communityURL: string;
   communityIconURL?: string;
   isCommunityMember: boolean;
+  communityAction: (communityData: CommunityDetails, isJoined: boolean) => void;
 };
 
 const Header = ({
@@ -14,6 +17,7 @@ const Header = ({
   communityURL,
   communityIconURL,
   isCommunityMember,
+  communityAction,
 }: HeaderProps) => {
   return (
     <section className={classes.root}>
@@ -32,7 +36,20 @@ const Header = ({
             <h2 className="mb-0">{communityName}</h2>
             <span>{communityURL}</span>
           </div>
-          <button type="button" className="normalise-btn primary-outline-btn">
+          <button
+            type="button"
+            className="normalise-btn primary-outline-btn"
+            onClick={() =>
+              communityAction(
+                {
+                  id: communityName,
+                  iconURL: communityIconURL ?? "",
+                  isModerator: false,
+                },
+                isCommunityMember
+              )
+            }
+          >
             {isCommunityMember ? "Joined" : "Join"}
           </button>
         </div>

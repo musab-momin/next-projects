@@ -7,6 +7,8 @@ import { Timestamp, doc, getDoc } from "firebase/firestore";
 import { GetServerSidePropsContext } from "next";
 import React from "react";
 import safeJsonStringify from "safe-json-stringify";
+import classes from "./community.module.css";
+import { useRouter } from "next/router";
 
 type CommunityProps = {
   communityData: {
@@ -20,25 +22,41 @@ type CommunityProps = {
 };
 
 const Community: React.FC<CommunityProps> = ({ communityData }) => {
-  const { id, creatorId, numberOfMembers, privacyType, createdAt, imageURL } =
-    communityData;
   const { communityDetails, onJoinOrLeaveCommunity } = useCommunityDetails();
-
+  const router = useRouter();
   const isMember = !!communityDetails?.find(
-    (item) => item.id === communityData.id
+    (item) => item.id === communityData?.id
   );
+
+  const redirectToSubmit = () => {
+    router.push(`/r/${communityData.id}/Submit`);
+  };
+
+  if (!communityData) {
+    return <>Page does not exists</>;
+  }
 
   return (
     <>
       <Header
-        communityName={id}
-        communityURL={`r/${id}`}
-        communityIconURL={imageURL}
+        communityName={communityData?.id}
+        communityURL={`r/${communityData?.id}`}
+        communityIconURL={communityData?.imageURL}
         isCommunityMember={isMember}
+        communityAction={onJoinOrLeaveCommunity}
       />
       <PageLayout>
         <>
-          <div>LEfT SIDE</div>
+          <div className={classes.searchbar}>
+            <input
+              type="text"
+              placeholder="Create Post"
+              className={classes.searchbar__input}
+              onClick={redirectToSubmit}
+            />
+            <div></div>
+            <div></div>
+          </div>
         </>
         <>
           <div>RIGHT SIDE</div>
@@ -56,12 +74,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       context.query.CommunityId as string
     );
     const communityDoc = await getDoc(communityRef);
-
+    const doesExists = communityDoc.exists();
     return {
       props: {
-        communityData: JSON.parse(
-          safeJsonStringify({ id: communityDoc.id, ...communityDoc.data() })
-        ),
+        communityData: doesExists
+          ? JSON.parse(
+              safeJsonStringify({ id: communityDoc.id, ...communityDoc.data() })
+            )
+          : null,
       },
     };
   } catch (error) {

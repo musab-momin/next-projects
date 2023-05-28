@@ -5,15 +5,7 @@ import { GrAdd } from "react-icons/gr";
 import { FaUser } from "react-icons/fa";
 import { VscEye } from "react-icons/vsc";
 import { HiLockClosed } from "react-icons/hi";
-import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  runTransaction,
-  serverTimestamp,
-  setDoc,
-} from "firebase/firestore";
+import { doc, runTransaction, serverTimestamp } from "firebase/firestore";
 import { firestore, auth } from "@/firebase/clientApp";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useGlobalAppApiContext } from "@/contexts/GlobalAppContext";
@@ -86,6 +78,7 @@ const Communities = () => {
             `This community name ${communityValues.communityName} is already taken, try another.`
           );
         }
+
         //create community
         transaction.set(communityDocRef, {
           creatorId: user?.uid,
@@ -104,11 +97,13 @@ const Communities = () => {
           {
             id: communityValues.communityName,
             isModerator: true,
+            iconURL: "",
           }
         );
-        setLoading(false);
         if (validationError) setValidationError("");
-        successToaster("Community created Successfully!!");
+        setLoading(false);
+        successToaster("community created successfully!!!");
+        setOpen(false);
       });
     } catch (err: any) {
       console.error(err);
