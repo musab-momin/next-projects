@@ -9,6 +9,10 @@
   --secondary-blue: #e0f1ff;
   --grey-primary: #fcfcfb;
   --grey-secondary: #EDEFF1;
+  --grey-200: #F6F7F8;
+  --grey-300: #878A8C;
+
+  --text-clr: #1c1c1c;
   
   
 }
@@ -20,9 +24,6 @@ body{
   overflow-x: hidden;
 }
 
-main{
-  max-width: 1100px;
-}
 li{
   list-style: none;
 }
@@ -182,7 +183,7 @@ h1, h2, h3, h4, h5, h6{
   cursor: pointer;
   font-size: 12px;
 }
-.btn-loading{
+.btn-loading, .btn-loading-circle{
   position: relative;
 }
 .btn-loading::before{
@@ -193,6 +194,17 @@ h1, h2, h3, h4, h5, h6{
   height: 100%;
   width: 0;
   border-radius: 4px;
+  background: rgba(0, 0, 0, 0.4);
+  animation: loadingAnimation 4s linear;
+}
+.btn-loading-circle::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  border-radius: 100px;
   background: rgba(0, 0, 0, 0.4);
   animation: loadingAnimation 4s linear;
 }

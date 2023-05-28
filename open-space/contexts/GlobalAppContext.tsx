@@ -42,6 +42,8 @@ export interface initialApiProps {
   successToaster: (message: string) => void;
   errorToaster: (message: string) => void;
   closeToaster: () => void;
+  setCommunityDetails: (user: User) => void;
+  filterCommunityDetails: (communityId: string) => void;
 }
 
 const initial: initialProps = {
@@ -63,6 +65,8 @@ const initialApi: initialApiProps = {
   successToaster: () => {},
   errorToaster: () => {},
   closeToaster: () => {},
+  setCommunityDetails: () => {},
+  filterCommunityDetails: () => {},
 };
 
 const GlobalAppContext = createContext(initial);
@@ -127,8 +131,19 @@ export const GlobalContextProvider: React.FC<globalAppContextProps> = ({
     }
   }, []);
 
+  const filterCommunityDetails = useCallback((communityId: string) => {
+    setGlobalState((prev) => ({
+      ...prev,
+      communityDetails:
+        prev.communityDetails &&
+        prev.communityDetails?.filter(
+          (community) => community.id !== communityId
+        ),
+    }));
+  }, []);
+
   useEffect(() => {
-    console.log("~ why its not");
+    // this is bcoz we want to clear cummunity state on logout
     if (!user) {
       setGlobalState((val) => ({ ...val, communityDetails: null }));
       return;
@@ -143,6 +158,8 @@ export const GlobalContextProvider: React.FC<globalAppContextProps> = ({
       successToaster: handleSuccessToaster,
       errorToaster: handleErrorToaster,
       closeToaster: handleCloseToaster,
+      setCommunityDetails,
+      filterCommunityDetails,
     }),
     [
       handleOpenModal,
@@ -150,6 +167,8 @@ export const GlobalContextProvider: React.FC<globalAppContextProps> = ({
       handleSuccessToaster,
       handleErrorToaster,
       handleCloseToaster,
+      setCommunityDetails,
+      filterCommunityDetails,
     ]
   );
 
