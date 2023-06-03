@@ -173,7 +173,7 @@ const Submit = () => {
                   <button
                     type="button"
                     className={`normalise-btn primary-btn ${
-                      loading ? "btn-loading" : ""
+                      loading ? "btn-loading-circle" : ""
                     }`}
                     onClick={handleSubmitPost}
                   >

@@ -12,6 +12,9 @@
   --grey-200: #F6F7F8;
   --grey-300: #878A8C;
 
+  --post-border: #ccc;
+  --post-timeline: rgba(0,121,211,0.05);
+
   --text-clr: #1c1c1c;
   
   
@@ -203,7 +206,7 @@ h1, h2, h3, h4, h5, h6{
   top: 0;
   left: 0;
   height: 100%;
-  width: 0;
+  width: 40%;
   border-radius: 100px;
   background: rgba(0, 0, 0, 0.4);
   animation: loadingAnimation 4s linear;
