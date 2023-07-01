@@ -81,3 +81,21 @@
     display: flex;
     justify-content: flex-end;
 }
+
+.detailContainer{
+    min-height: 300px;
+    margin-block: 2rem;
+    background: var(--white-clr);
+    border-radius: 4px;
+}
+.detail{
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+}
+
+.detail small{
+    font-size: 1.2rem;
+}

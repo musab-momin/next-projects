@@ -1,7 +1,6 @@
 import Header from "@/components/Community/Header";
 import PageLayout from "@/components/Layouts/PageLayout";
-import { useGlobalAppContex } from "@/contexts/GlobalAppContext";
-import { firestore } from "@/firebase/clientApp";
+import { auth, firestore } from "@/firebase/clientApp";
 import useCommunityDetails from "@/utils/shared-hooks/useCommunityDetails";
 import {
   Timestamp,
@@ -14,12 +13,13 @@ import {
   where,
 } from "firebase/firestore";
 import { GetServerSidePropsContext } from "next";
-import React from "react";
+import React, { useEffect } from "react";
 import safeJsonStringify from "safe-json-stringify";
 import classes from "./community.module.css";
 import { useRouter } from "next/router";
 import Post from "@/components/Community/Post";
-import { PostType } from "@/contexts/PostContext";
+import { PostType, usePostContext } from "@/contexts/PostContext";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 type CommunityProps = {
   communityData: {
@@ -38,6 +38,7 @@ const Community: React.FC<CommunityProps> = ({
   communityPosts,
 }) => {
   const { communityDetails, onJoinOrLeaveCommunity } = useCommunityDetails();
+  const { state, dispatch } = usePostContext();
   const router = useRouter();
   const isMember = !!communityDetails?.find(
     (item) => item.id === communityData?.id
@@ -47,7 +48,10 @@ const Community: React.FC<CommunityProps> = ({
     router.push(`/r/${communityData.id}/Submit`);
   };
 
-  console.log("~@@", communityPosts);
+  useEffect(() => {
+    dispatch({ type: "ADDPOSTS", payload: communityPosts });
+  }, [dispatch, communityPosts]);
+
   if (!communityData) {
     return <>Page does not exists</>;
   }
@@ -72,13 +76,14 @@ const Community: React.FC<CommunityProps> = ({
             />
           </div>
           <div className="flex-column">
-            {communityPosts ? (
+            {state.allPosts ? (
               <>
-                {communityPosts?.map((post) => (
+                {state.allPosts?.map((post) => (
                   <Post
-                    key={post.creatorId}
+                    key={post.id}
                     postDetails={post}
                     communityIcon={communityData.imageURL}
+                    communityId={communityData?.id}
                   />
                 ))}
               </>
@@ -88,7 +93,12 @@ const Community: React.FC<CommunityProps> = ({
           </div>
         </>
         <>
-          <div>RIGHT SIDE</div>
+          <div className={classes.detailContainer}>
+            <div className={classes.detail}>
+              <small>{communityData?.numberOfMembers}</small>
+              <small>Active member</small>
+            </div>
+          </div>
         </>
       </PageLayout>
     </>

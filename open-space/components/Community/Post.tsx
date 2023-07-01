@@ -5,22 +5,69 @@ import { RxThickArrowDown, RxThickArrowUp } from "react-icons/rx";
 import { BiComment } from "react-icons/bi";
 import { HiOutlineShare } from "react-icons/hi";
 import { RiBookmarkLine } from "react-icons/ri";
-import { PostType } from "@/contexts/PostContext";
+import { PostType, usePostContext } from "@/contexts/PostContext";
 import { formatDistanceToNow } from "date-fns";
 import { enIN } from "date-fns/locale";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, firestore } from "@/firebase/clientApp";
+import { collection, doc, increment, writeBatch } from "firebase/firestore";
 
 type PostProps = {
   postDetails: PostType;
   communityIcon?: string;
+  communityId: string;
 };
 
-const Post: React.FC<PostProps> = ({ postDetails, communityIcon }) => {
-  console.log("~@@ rendering posts");
+const Post: React.FC<PostProps> = ({
+  postDetails,
+  communityIcon,
+  communityId,
+}) => {
+  const { dispatch } = usePostContext();
+  const [user] = useAuthState(auth);
+  const existingVote = false;
+  const batch = writeBatch(firestore);
+
+  const onVote = async (vote: number) => {
+    try {
+      const postRef = doc(firestore, "posts", postDetails.id);
+      if (!existingVote) {
+        //create a new post vote document
+        const postVoteRef = doc(
+          collection(firestore, `users/${user?.uid}/postVotes`)
+        );
+
+        const newVote = {
+          id: postVoteRef.id,
+          postId: postDetails.id,
+          communityId,
+          voteVlaue: vote,
+        };
+
+        batch.set(postVoteRef, newVote);
+        batch.update(postRef, {
+          upVotes: increment(vote),
+        });
+        await batch.commit();
+        dispatch({
+          type: "UPDATE_POST",
+          payload: { ...postDetails, upVotes: postDetails.upVotes + 1 },
+        });
+      }
+    } catch (error: any) {
+      console.log("~@@##error on voting", error.message);
+    }
+  };
+
   return (
     <article className={classes.post}>
       <div className={classes.postrating}>
         <div className={classes.postratingwrapper}>
-          <button type="button" className="normalise-btn">
+          <button
+            type="button"
+            className="normalise-btn"
+            onClick={() => onVote(1)}
+          >
             <RxThickArrowUp />
           </button>
           <small>{postDetails.upVotes}</small>

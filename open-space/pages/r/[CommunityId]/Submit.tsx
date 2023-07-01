@@ -83,7 +83,7 @@ const Submit = () => {
   };
 
   const handleSubmitPost = async () => {
-    const postObj: PostType = {
+    const postObj = {
       creatorId: user!.uid,
       communityName: CommunityId as string,
       creatorName: user!.email!.split("@")[0],

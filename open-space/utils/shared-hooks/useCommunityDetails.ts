@@ -4,14 +4,7 @@ import {
   useGlobalAppContex,
 } from "@/contexts/GlobalAppContext";
 import { auth, firestore } from "@/firebase/clientApp";
-import {
-  collection,
-  doc,
-  increment,
-  runTransaction,
-  setDoc,
-  writeBatch,
-} from "firebase/firestore";
+import { doc, increment, runTransaction } from "firebase/firestore";
 import { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 

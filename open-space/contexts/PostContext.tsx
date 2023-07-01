@@ -3,6 +3,7 @@ import React, { createContext, useContext, useReducer } from "react";
 import postReducer from "./PostReducer";
 
 export interface PostType {
+  id: string;
   communityName: string;
   title: string;
   body: string;
