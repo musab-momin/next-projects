@@ -2,7 +2,12 @@
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    domains: ["b.thumbs.redditmedia.com"],
+    domains: [
+      "b.thumbs.redditmedia.com",
+      "i.redd.it",
+      "firebasestorage.googleapis.com",
+      "www.redditstatic.com",
+    ],
   },
 };
 

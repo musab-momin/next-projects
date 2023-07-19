@@ -83,7 +83,7 @@ const Submit = () => {
   };
 
   const handleSubmitPost = async () => {
-    const postObj: PostType = {
+    const postObj = {
       creatorId: user!.uid,
       communityName: CommunityId as string,
       creatorName: user!.email!.split("@")[0],
@@ -173,7 +173,7 @@ const Submit = () => {
                   <button
                     type="button"
                     className={`normalise-btn primary-btn ${
-                      loading ? "btn-loading" : ""
+                      loading ? "btn-loading-circle" : ""
                     }`}
                     onClick={handleSubmitPost}
                   >
