@@ -1,3 +1,4 @@
+.gitignore
 ai-saas/node_modules
 ai-saas/.next
 cocktail-db/node_modules
