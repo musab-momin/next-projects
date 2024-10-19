@@ -1,9 +1,34 @@
-.gitignore
-ai-saas/node_modules
-ai-saas/.next
-cocktail-db/node_modules
-cocktail-db/.next
-next-fourteen/node_modules
-next-fourteen/.next
-open-space/node_modules
-open-space/.next
+# Ignore node_modules and Bun's equivalent folder
+**/node_modules
+**/.bun
+
+# Ignore .next build folders across all Next.js sub-projects
+**/.next
+
+# Ignore Bun lock files and cache
+**/bun.lockb
+**/.bun-install-cache
+
+# Ignore environment files (common in most projects)
+**/.env
+**/.env.local
+**/.env.*.local
+
+# Ignore log files
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/bun-debug.log*
+
+# Ignore package manager lock files (if not using them)
+**/package-lock.json
+**/yarn.lock
+
+# Ignore macOS and output artifacts
+.DS_Store
+**/dist
+**/.out
+
+# Ignore temporary files and caches
+**/.cache
+**/.turbo
